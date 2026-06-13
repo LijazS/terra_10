@@ -28,6 +28,12 @@ resource "azurerm_kubernetes_cluster" "this" {
     max_count            = var.node_max_count
     os_disk_size_gb      = var.os_disk_size_gb
     type                 = "VirtualMachineScaleSets"
+
+    upgrade_settings {
+      max_surge                     = "10%"
+      drain_timeout_in_minutes      = 0
+      node_soak_duration_in_minutes = 0
+    }
   }
 
   identity {

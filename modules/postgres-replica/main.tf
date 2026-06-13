@@ -13,6 +13,7 @@ resource "azurerm_postgresql_flexible_server" "this" {
   zone                          = var.zone
   sku_name                      = var.sku_name
   storage_mb                    = var.storage_mb
+  auto_grow_enabled             = var.storage_autogrow_enabled
   storage_tier                  = "P4"
   public_network_access_enabled = false
 
@@ -20,12 +21,6 @@ resource "azurerm_postgresql_flexible_server" "this" {
   # Promotion is a separate operation; after promotion, replication stops and the
   # promoted server becomes an independent read-write server.
   tags = var.tags
-}
-
-resource "azurerm_postgresql_flexible_server_configuration" "storage_autogrow" {
-  name      = "storage_autogrow"
-  server_id = azurerm_postgresql_flexible_server.this.id
-  value     = var.storage_autogrow_enabled ? "on" : "off"
 }
 
 data "azurerm_monitor_diagnostic_categories" "this" {
@@ -46,12 +41,11 @@ resource "azurerm_monitor_diagnostic_setting" "this" {
     }
   }
 
-  dynamic "metric" {
+  dynamic "enabled_metric" {
     for_each = toset(data.azurerm_monitor_diagnostic_categories.this.metrics)
 
     content {
-      category = metric.value
-      enabled  = true
+      category = enabled_metric.value
     }
   }
 }

@@ -13,6 +13,7 @@ resource "azurerm_postgresql_flexible_server" "this" {
   administrator_password        = var.admin_password
   zone                          = var.zone
   storage_mb                    = var.storage_mb
+  auto_grow_enabled             = var.storage_autogrow_enabled
   sku_name                      = var.sku_name
   backup_retention_days         = var.backup_retention_days
   geo_redundant_backup_enabled  = var.geo_redundant_backup_enabled
@@ -31,12 +32,6 @@ resource "azurerm_postgresql_flexible_server" "this" {
   }
 
   tags = var.tags
-}
-
-resource "azurerm_postgresql_flexible_server_configuration" "storage_autogrow" {
-  name      = "storage_autogrow"
-  server_id = azurerm_postgresql_flexible_server.this.id
-  value     = var.storage_autogrow_enabled ? "on" : "off"
 }
 
 resource "azurerm_postgresql_flexible_server_database" "this" {
@@ -64,12 +59,11 @@ resource "azurerm_monitor_diagnostic_setting" "this" {
     }
   }
 
-  dynamic "metric" {
+  dynamic "enabled_metric" {
     for_each = toset(data.azurerm_monitor_diagnostic_categories.this.metrics)
 
     content {
-      category = metric.value
-      enabled  = true
+      category = enabled_metric.value
     }
   }
 }
