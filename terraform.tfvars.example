@@ -1,0 +1,23 @@
+project_name     = "clusterwatch"
+environment      = "dev"
+primary_location = "centralindia"
+replica_location = "southindia"
+
+tags = {
+  owner       = "platform-team"
+  cost_center = "engineering"
+}
+
+aks_authorized_ip_ranges = [
+  "203.0.113.10/32"
+]
+
+postgres_admin_username = "pgadmin"
+postgres_admin_password = "ChangeMe-StrongPassword123!"
+
+postgres_database_name                = "clusterwatch"
+postgres_sku_name                     = "B_Standard_B1ms"
+postgres_storage_mb                   = 32768
+postgres_backup_retention_days        = 7
+postgres_geo_redundant_backup_enabled = false
+postgres_ha_enabled                   = false
