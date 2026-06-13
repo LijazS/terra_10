@@ -162,9 +162,14 @@ variable "postgres_database_name" {
 }
 
 variable "postgres_sku_name" {
-  description = "PostgreSQL Flexible Server SKU."
+  description = "PostgreSQL Flexible Server SKU. Use a General Purpose or Memory Optimized SKU because this architecture creates a read replica."
   type        = string
-  default     = "B_Standard_B1ms"
+  default     = "GP_Standard_D2s_v3"
+
+  validation {
+    condition     = can(regex("^(GP|MO)_", var.postgres_sku_name))
+    error_message = "Read replicas require a General Purpose or Memory Optimized PostgreSQL SKU, for example GP_Standard_D2s_v3."
+  }
 }
 
 variable "postgres_storage_mb" {

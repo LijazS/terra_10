@@ -16,7 +16,7 @@ postgres_admin_username = "pgadmin"
 postgres_admin_password = "ChangeMe-StrongPassword123!"
 
 postgres_database_name                = "clusterwatch"
-postgres_sku_name                     = "B_Standard_B1ms"
+postgres_sku_name                     = "GP_Standard_D2s_v3"
 postgres_storage_mb                   = 32768
 postgres_backup_retention_days        = 7
 postgres_geo_redundant_backup_enabled = false
